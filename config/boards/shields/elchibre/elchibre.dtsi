@@ -22,7 +22,7 @@ RC(2,0) RC(2,1) RC(2,2) RC(2,3) RC(2,4)         RC(6,5) RC(6,6) RC(6,7) RC(6,8) 
     kscan0: kscan {
         compatible = "zmk,kscan-gpio-matrix";
         label = "KSCAN";
-        debounce-press-ms = <8>;
-        debounce-release-ms = <8>;
+        debounce-press-ms = <10>;
+        debounce-release-ms = <10>;
     };
 };
