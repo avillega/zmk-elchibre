@@ -51,6 +51,32 @@
             hold-trigger-on-release;
         };
 
+        hml_shft: home_row_mods_left_shift {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <200>;
+            quick-tap-ms = <175>;
+            require-prior-idle-ms = <0>;
+            bindings = <&kp>, <&kp>;
+
+            hold-trigger-key-positions = <KEYS_R THUMBS>;
+            hold-trigger-on-release;
+        };
+
+        hmr_shft: home_row_mods_right_shift {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <200>;
+            quick-tap-ms = <175>;
+            require-prior-idle-ms = <0>;
+            bindings = <&kp>, <&kp>;
+
+            hold-trigger-key-positions = <KEYS_L THUMBS>;
+            hold-trigger-on-release;
+        };
+
         sk_shft: sticky_shift_caps_word {
             compatible = "zmk,behavior-mod-morph";
             #binding-cells = <0>;
@@ -101,8 +127,8 @@
         base_layer {
             label = "BASE";
             bindings = <
-&kp Q          &kp W  &kp E         &kp R         &kp T       &kp Y     &kp U        &kp I         &kp O    &kp P
-&hml LSHIFT A  &kp S  &hml LCTRL D  &hml LGUI F   &kp G       &kp H     &hmr RGUI J  &hmr RCTRL K  &kp L    &hmr RSHIFT SQT
+&kp Q               &kp W  &kp E         &kp R         &kp T       &kp Y     &kp U        &kp I         &kp O    &kp P
+&hml_shft LSHIFT A  &kp S  &hml LCTRL D  &hml LGUI F   &kp G       &kp H     &hmr RGUI J  &hmr RCTRL K  &kp L    &hmr_shft RSHIFT SQT
 &kp Z          &kp X  &kp C         &kp V         &kp B       &kp N     &kp M        &kp COMMA     &kp DOT  &kp FSLH
                         &hml LALT TAB   &lt SYM SPACE             &lt NAV RET  &sk_shft
             >;
@@ -111,8 +137,8 @@
         hands_down_nue {
             label = "NUE";
             bindings = <
-&kp W          &kp F  &kp M         &kp P         &kp V       &kp J      &kp DOT      &kp Q         &kp SQT  &kp Z
-&hml LSHIFT R  &kp S  &hml LCTRL N  &hml LGUI T   &kp B       &kp COMMA  &hmr RGUI A  &hmr RCTRL E  &kp I    &hmr RSHIFT H
+&kp W               &kp F  &kp M         &kp P         &kp V       &kp J      &kp DOT      &kp Q         &kp SQT  &kp Z
+&hml_shft LSHIFT R  &kp S  &hml LCTRL N  &hml LGUI T   &kp B       &kp COMMA  &hmr RGUI A  &hmr RCTRL E  &kp I    &hmr_shft RSHIFT H
 &kp X          &kp C  &kp L         &kp D         &kp G       &kp UNDER  &kp U        &kp O         &kp Y    &kp K
                      &hml LALT TAB    &lt SYM SPACE                  &lt NAV RET  &kp BSPC
             >;
