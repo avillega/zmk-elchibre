@@ -4,7 +4,7 @@
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/outputs.h>
 
-#define ZMK_POINTING_DEFAULT_SCRL_VAL 25 // default 10
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 18 // default 10
 #include <dt-bindings/zmk/pointing.h>
 
 #define BASE 0
@@ -56,24 +56,44 @@
             hold-trigger-on-release;
         };
 
+        // Shift on the pinky home key, tuned apart from hml/hmr:
+        // prior-idle is 100 (not 150) so a capital typed right after
+        // space still registers, while sub-100ms typing rolls resolve
+        // as taps. Thumbs are excluded from the trigger list so
+        // word-final "a"+space rolls can't read as shift; shift+space/
+        // enter go through sk_shft instead.
+        hml_shft: home_row_mods_left_shift {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <280>;
+            quick-tap-ms = <175>;
+            require-prior-idle-ms = <100>;
+            bindings = <&kp>, <&kp>;
+
+            hold-trigger-key-positions = <KEYS_R>;
+            hold-trigger-on-release;
+        };
+
+        hmr_shft: home_row_mods_right_shift {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <280>;
+            quick-tap-ms = <175>;
+            require-prior-idle-ms = <100>;
+            bindings = <&kp>, <&kp>;
+
+            hold-trigger-key-positions = <KEYS_L>;
+            hold-trigger-on-release;
+        };
+
         sk_shft: sticky_shift_caps_word {
             compatible = "zmk,behavior-mod-morph";
             #binding-cells = <0>;
             bindings = <&sk RSHIFT>, <&caps_word>;
 
             mods = <(MOD_LSFT | MOD_RSFT)>;
-        };
-
-        // Tab that becomes Shift+Tab while left Cmd/Ctrl is held, so the
-        // right-hand tab combo cycles windows/tabs backwards. keep-mods
-        // keeps Cmd/Ctrl active so the OS sees the full chord.
-        tab_rev: tab_reverse_morph {
-            compatible = "zmk,behavior-mod-morph";
-            #binding-cells = <0>;
-            bindings = <&kp TAB>, <&kp LS(TAB)>;
-
-            mods = <(MOD_LGUI | MOD_LCTL)>;
-            keep-mods = <(MOD_LGUI | MOD_LCTL)>;
         };
     };
 
@@ -92,43 +112,6 @@
             require-prior-idle-ms = <150>;
             key-positions = <RT3 RT2>;
             bindings = <&kp BSPC>;
-        };
-
-        // Low prior-idle so these fire mid-word/mid-sentence; the tight
-        // term is what guards against "sd"/"kl" rolls while typing.
-        combo_sticky_shift_l {
-            timeout-ms = <25>;
-            require-prior-idle-ms = <50>;
-            key-positions = <LM3 LM2>;
-            layers = <BASE NUE>;
-            bindings = <&sk_shft>;
-        };
-
-        combo_sticky_shift_r {
-            timeout-ms = <25>;
-            require-prior-idle-ms = <50>;
-            key-positions = <RM2 RM3>;
-            layers = <BASE NUE>;
-            bindings = <&sk_shft>;
-        };
-
-        // Tab on bottom-row index+middle chords. Left = Tab; right morphs
-        // to Shift+Tab under left Cmd/Ctrl (reverse cycling). Low prior-idle
-        // so repeated chords keep firing while cycling through windows.
-        combo_tab_l {
-            timeout-ms = <25>;
-            require-prior-idle-ms = <50>;
-            key-positions = <LB2 LB1>;
-            layers = <BASE NUE>;
-            bindings = <&kp TAB>;
-        };
-
-        combo_tab_r {
-            timeout-ms = <25>;
-            require-prior-idle-ms = <50>;
-            key-positions = <RB1 RB2>;
-            layers = <BASE NUE>;
-            bindings = <&tab_rev>;
         };
 
         combo_dongle_boot {
@@ -155,20 +138,20 @@
         base_layer {
             label = "BASE";
             bindings = <
-&kp Q   &kp W          &kp E         &kp R         &kp T       &kp Y     &kp U        &kp I         &kp O          &kp P
-&kp A   &hml LALT S    &hml LCTRL D  &hml LGUI F   &kp G       &kp H     &hmr RGUI J  &hmr RCTRL K  &hmr RALT L    &kp SQT
-&kp Z   &kp X          &kp C         &kp V         &kp B       &kp N     &kp M        &kp COMMA     &kp DOT        &kp FSLH
-                        &none           &lt SYM SPACE             &lt NAV RET  &none
+&kp Q               &kp W  &kp E         &kp R         &kp T       &kp Y     &kp U        &kp I         &kp O    &kp P
+&hml_shft LSHIFT A  &kp S  &hml LCTRL D  &hml LGUI F   &kp G       &kp H     &hmr RGUI J  &hmr RCTRL K  &kp L    &hmr_shft RSHIFT SQT
+&kp Z               &kp X  &kp C         &kp V         &kp B       &kp N     &kp M        &kp COMMA     &kp DOT  &kp FSLH
+                        &hml LALT TAB   &lt SYM SPACE             &lt NAV RET  &sk_shft
             >;
         };
 
         hands_down_nue {
             label = "NUE";
             bindings = <
-&kp W   &kp F          &kp M         &kp P         &kp V       &kp J      &kp DOT      &kp Q         &kp SQT        &kp Z
-&kp R   &hml LALT S    &hml LCTRL N  &hml LGUI T   &kp B       &kp COMMA  &hmr RGUI A  &hmr RCTRL E  &hmr RALT I    &kp H
-&kp X   &kp C          &kp L         &kp D         &kp G       &kp UNDER  &kp U        &kp O         &kp Y          &kp K
-                     &none            &lt SYM SPACE                  &lt NAV RET  &none
+&kp W               &kp F  &kp M         &kp P         &kp V       &kp J      &kp DOT      &kp Q         &kp SQT  &kp Z
+&hml_shft LSHIFT R  &kp S  &hml LCTRL N  &hml LGUI T   &kp B       &kp COMMA  &hmr RGUI A  &hmr RCTRL E  &kp I    &hmr_shft RSHIFT H
+&kp X               &kp C  &kp L         &kp D         &kp G       &kp UNDER  &kp U        &kp O         &kp Y    &kp K
+                     &hml LALT TAB    &lt SYM SPACE                  &lt NAV RET  &kp BSPC
             >;
         };
 
